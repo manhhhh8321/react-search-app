@@ -1,11 +1,9 @@
-import { useState } from 'react'
-import './App.css'
-import SearchBar from './components/SearchBar'
+import SearchPage from './page/Home'
 
 function App() {
   return (
     <>
-     <SearchBar />
+     <SearchPage />
     </>
   )
 }
