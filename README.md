@@ -53,7 +53,7 @@ To execute the test suite, run:
 ```sh
 yarn run test
 ```
-Test coverage reports are generated in the `coverage` folder.
+Test coverage reports & UI screenshots are generated in the `screenshots` folder.
 
 ---
 
