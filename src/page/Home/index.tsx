@@ -1,26 +1,26 @@
+import SearchPageBanner from "@/components/common/Banner";
 import SearchBar from "@/components/SearchBar";
 import SearchResult from "@/components/SearchResult";
-import { ISearchResultResponse } from "@/types";
-import { fetchSearchResult } from "@/utils/api";
-import { useState } from "react";
+import { useSearch } from "@/hooks/useSearch";
 
 function SearchPage() {
-  const [searchResult, setSearchResult] =
-    useState<ISearchResultResponse | null>();
-  const [error, setError] = useState<unknown | null>();
-  const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const {
+    results: searchResult,
+    searchKeyword,
+    fetchSearchResults,
+    error,
+  } = useSearch();
 
   const onSearch = (keyword: string) => {
-    fetchSearchResult(keyword).then(({ error, data }) => {
-      setSearchKeyword(keyword);
-      setSearchResult(data);
-      setError(error);
-    });
+    fetchSearchResults(keyword);
   };
 
   return (
     <>
       <div className="shadow-general sticky top-0 bg-white z-10">
+        <div>
+          <SearchPageBanner />
+        </div>
         <div className="py-10 w-4/5 mx-auto">
           <SearchBar onSearch={onSearch} />
         </div>

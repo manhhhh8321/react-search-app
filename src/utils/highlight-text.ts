@@ -1,94 +1,73 @@
-import { IHighlight } from "@/types";
-
 export interface ITextFormat {
   text: string;
   type: "bold" | "normal";
 }
 
 /**
- * Given a text string and an array of highlight offsets, the function will identify highlighted text
- * within the text string. Split the text string into an array of substrings, each indicating text format "normal" or "bold"
- * @param text
- * @param highlights
- * @returns
+ * Extracts highlighted text from a document given offset ranges.
+ * Returns an array of text segments with "bold" or "normal" formatting.
  */
 export const extractHighlightFromDocument = (
   text: string,
-  highlights: IHighlight[]
+  highlights: { BeginOffset: number; EndOffset: number }[]
 ): ITextFormat[] => {
-  if (!highlights || highlights.length === 0) return [{ text, type: "normal" }];
+  if (!highlights?.length) return [{ text, type: "normal" }];
 
   const result: ITextFormat[] = [];
   let currentIndex = 0;
 
-  highlights.forEach(({ BeginOffset, EndOffset }) => {
+  for (const { BeginOffset, EndOffset } of highlights) {
     if (currentIndex < BeginOffset) {
       result.push({
-        text: text.slice(currentIndex, BeginOffset),
+        text: text.substring(currentIndex, BeginOffset),
         type: "normal",
       });
     }
-
-    result.push({
-      text: text.slice(BeginOffset, EndOffset),
-      type: "bold",
-    });
-
+    result.push({ text: text.substring(BeginOffset, EndOffset), type: "bold" });
     currentIndex = EndOffset;
-  });
+  }
 
-  if (currentIndex < text.length - 1) {
-    result.push({
-      text: text.slice(currentIndex, text.length),
-      type: "normal",
-    });
+  if (currentIndex < text.length) {
+    result.push({ text: text.substring(currentIndex), type: "normal" });
   }
 
   return result;
 };
 
 /**
- * Given a text string and a keyword (search term), the function will identify substrings of text that match the keyword, which will then be highlighted.
- * Split the text string into an array of substrings, each indicating text format "normal" or "bold"
- * @param text
- * @param keyword
- * @returns
+ * Highlights occurrences of a keyword in a given text.
+ * Returns an array of text segments with "bold" or "normal" formatting.
  */
 export const extractHighlightByKeyword = (
   text: string,
   keyword: string
 ): ITextFormat[] => {
-  const trimmedKeyword = keyword.trim();
+  if (!keyword.trim()) return [{ text, type: "normal" }];
+  keyword = keyword.trim().toLowerCase();
   const result: ITextFormat[] = [];
-
   let index = 0;
+  const keywordLength = keyword.length;
 
   while (index < text.length) {
-    const indexOfKeyword = text.indexOf(trimmedKeyword, index);
-
-    if (indexOfKeyword === -1) {
-      if (index < text.length) {
-        result.push({
-          text: text.slice(index),
-          type: "normal",
-        });
-      }
-      break;
-    }
+    const indexOfKeyword = text.indexOf(keyword, index);
+    if (indexOfKeyword === -1) break;
 
     if (index < indexOfKeyword) {
       result.push({
-        text: text.slice(index, indexOfKeyword),
+        text: text.substring(index, indexOfKeyword),
         type: "normal",
       });
     }
 
     result.push({
-      text: text.slice(indexOfKeyword, indexOfKeyword + trimmedKeyword.length),
+      text: text.substring(indexOfKeyword, indexOfKeyword + keywordLength),
       type: "bold",
     });
+    index = indexOfKeyword + keywordLength;
+  }
 
-    index = indexOfKeyword + trimmedKeyword.length;
+  if (index < text.length) {
+    result.push({ text: text.substring(index), type: "normal" });
   }
 
   return result;
