@@ -94,4 +94,13 @@ describe("SearchBar Component", () => {
     fireEvent.click(clearButton);
     expect(input).toHaveValue("");
   });
+
+  test("does not trigger search when input is empty", async () => {
+    render(<SearchBar onSearch={mockOnSearch} />);
+    const searchButton = screen.getByRole("button", { name: /search-btn/i });
+
+    fireEvent.click(searchButton);
+
+    expect(mockOnSearch).not.toHaveBeenCalled();
+  });
 });
