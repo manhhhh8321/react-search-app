@@ -1,50 +1,59 @@
-# React + TypeScript + Vite
+# React Search App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains a search functionality implementation using React, TypeScript, and Tailwind CSS. The project includes search filtering, suggestions, and result highlighting.
 
-Currently, two official plugins are available:
+## Table of Contents
+- [Overview](#overview)
+- [Libraries Used](#libraries-used)
+- [Installation](#installation)
+- [Running the Project](#running-the-project)
+- [Running Tests](#running-tests)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview
 
-## Expanding the ESLint configuration
+This project is designed to demonstrate search-related features, including:
+- Filtering search results based on a keyword.
+- Providing search suggestions dynamically.
+- Highlighting matched keywords within the results.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The search logic is handled entirely on the frontend, processing static data received from an API.
 
-- Configure the top-level `parserOptions` property like this:
+## Libraries Used
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- **React**: A JavaScript library for building user interfaces.
+- **TypeScript**: A typed superset of JavaScript.
+- **Jest**: A testing framework for JavaScript applications.
+- **Tailwind CSS**: A utility-first CSS framework for styling.
+
+## Installation
+
+Follow these steps to set up the project locally:
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/manhhhh8321/react-search-app.git
+   cd react-search-app
+   ```
+2. Install dependencies:
+   ```sh
+   yarn install
+   ```
+
+## Running the Project
+
+To start the development server, run:
+```sh
+yarn run dev
 ```
+Then, open your browser and go to `http://localhost:5173`.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Running Tests
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+To execute the test suite, run:
+```sh
+yarn run test
 ```
+Test coverage reports are generated in the `coverage` folder.
+
+---
+
