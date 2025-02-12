@@ -3,10 +3,13 @@ import { useSuggestions } from "@/hooks/useSuggestion";
 import CrossIcon from "@/assets/icons/CrossIcon";
 import SearchIcon from "@/assets/icons/SearchIcon";
 import SuggestionDropdown from "../SuggestionDropDown";
+import DOMPurify from "dompurify";
 
 interface ISearchBoxProps {
   onSearch: (keyword: string) => void;
 }
+
+const MAX_INPUT_LENGTH = 100;
 
 function SearchBar({ onSearch }: ISearchBoxProps) {
   const { suggestions, fetchSuggestions, clearSuggestions } = useSuggestions();
@@ -19,10 +22,18 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
     if (!isDropdownOpen) setActiveSuggestionIndex(-1);
   }, [isDropdownOpen]);
 
+  const sanitizeInput = (input: string) => {
+    return DOMPurify.sanitize(input).replace(/[^a-zA-Z0-9\s]/g, "");
+  };
+
   const handleInputChange = (input: string) => {
-    setInputValue(input);
-    if (input.length > 2) {
-      fetchSuggestions(input);
+    if (input.length > MAX_INPUT_LENGTH) return;
+
+    const sanitizedInput = sanitizeInput(input);
+    setInputValue(sanitizedInput);
+    
+    if (sanitizedInput.length > 2) {
+      fetchSuggestions(sanitizedInput);
       setIsDropdownOpen(true);
     } else {
       clearSuggestions();
