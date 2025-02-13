@@ -103,4 +103,32 @@ describe("SearchBar Component", () => {
 
     expect(mockOnSearch).not.toHaveBeenCalled();
   });
+
+  test("will sanitize the input value", async () => {
+    render(<SearchBar onSearch={mockOnSearch} />);
+    const input = screen.getByRole("textbox");
+
+    fireEvent.change(input, { target: { value: "child care$#@" } });
+
+    await waitFor(() => {
+      expect(screen.getByText("child care")).toBeInTheDocument();
+    });
+
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(mockOnSearch).toHaveBeenCalledWith("child care");
+  });
+
+  it("will not trigger search if the input value is more than 100 characters", async () => {
+    render(<SearchBar onSearch={mockOnSearch} />);
+    const input = screen.getByRole("textbox");
+
+    fireEvent.change(input, {
+      target: { value: "child care".repeat(20) },
+    });
+
+    fireEvent.keyDown(input, { key: "Enter" });
+
+    expect(mockOnSearch).not.toHaveBeenCalled();
+  });
 });
