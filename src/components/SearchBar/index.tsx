@@ -16,6 +16,7 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [inputValue, setInputValue] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -27,11 +28,16 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
   };
 
   const handleInputChange = (input: string) => {
-    if (input.length > MAX_INPUT_LENGTH) return;
+    if (input.length > MAX_INPUT_LENGTH) {
+      setError("Input is too long");
+      return;
+    } else {
+      setError(null);
+    }
 
     const sanitizedInput = sanitizeInput(input);
     setInputValue(sanitizedInput);
-    
+
     if (sanitizedInput.length > 2) {
       fetchSuggestions(sanitizedInput);
       setIsDropdownOpen(true);
@@ -96,6 +102,8 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
           onFocus={() => setIsDropdownOpen(true)}
           aria-label="search-textfield"
         />
+        {error && <div className="text-red-500 text-sm pt-2">{error}</div>}
+
         {inputValue.length > 0 && (
           <button
             className="absolute top-2/4 right-2 -translate-y-2/4"
