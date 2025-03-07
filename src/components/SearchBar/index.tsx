@@ -81,7 +81,6 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
 
   const selectSuggestion = (suggestion: string) => {
     setInputValue(suggestion);
-    if (inputRef.current) inputRef.current.value = suggestion;
     handleSubmit(suggestion);
   };
 
@@ -98,7 +97,7 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
       <div className="flex-grow relative">
         <input
           type="text"
-          ref={inputRef}
+          value={inputValue}
           className="w-full h-full rounded-lg focus:outline-none focus:ring-0 pl-4 pr-10"
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={handleKeyDown}

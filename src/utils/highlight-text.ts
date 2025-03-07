@@ -13,9 +13,8 @@ export const extractHighlightFromDocument = (
 ): ITextFormat[] => {
   if (!searchKeyword.trim()) return [{ text, type: "normal" }];
 
-  const words = searchKeyword.toLowerCase().split(/\s+/);
+  const words = searchKeyword.toLowerCase().split(/\s+/).filter((word) => word.length >= 3);
   const regex = new RegExp(`(${words.join("|")})`, "gi");
-
   const result: ITextFormat[] = [];
   let lastIndex = 0;
 
