@@ -33,13 +33,14 @@ function SearchResult(props: ISeachResultProps) {
                   data-testid={`search-item-${searchItem.DocumentId}`}
                 >
                   <a
+                    target="_blank"
                     className="text-primary-blue font-semibold text-[22px] hover:underline visited:text-purple-700"
                     href={searchItem.DocumentURI}
                   >
                     <HighlightText
                       textFormats={extractHighlightFromDocument(
                         searchItem.DocumentTitle.Text,
-                        searchKeyword,
+                        searchKeyword
                       )}
                     />
                   </a>
@@ -47,11 +48,12 @@ function SearchResult(props: ISeachResultProps) {
                     <HighlightText
                       textFormats={extractHighlightFromDocument(
                         searchItem.DocumentExcerpt.Text,
-                        searchKeyword,
+                        searchKeyword
                       )}
                     />
                   </div>
                   <a
+                    target="_blank"
                     className="text-sm font-normal text-[#686868] break-all"
                     href={searchItem.DocumentURI}
                   >
