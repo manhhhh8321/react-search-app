@@ -8,6 +8,7 @@ This repository contains a search functionality implementation using React, Type
 - [Installation](#installation)
 - [Running the Project](#running-the-project)
 - [Running Tests](#running-tests)
+- [Deployment](#deployment)
 
 ## Overview
 
@@ -55,5 +56,8 @@ yarn run test
 ```
 Test coverage reports & UI screenshots are generated in the `screenshots` folder.
 
----
+## Deployment
 
+This application is deployed using **AWS CloudFront + S3** as a static site. You can access the live version here:
+
+🔗 **[Live Demo](https://d1iyta6uxh0hou.cloudfront.net/)**
