@@ -4,8 +4,8 @@ This repository contains a search functionality implementation using React, Type
 
 ## Table of Contents  
 - [Overview](#overview)  
+- [Deployment](#deployment)
 - [Preview](#preview)  
-- [Deployment](#deployment)  
 - [Libraries Used](#libraries-used)  
 - [Installation](#installation)  
 - [Running the Project](#running-the-project)  
@@ -20,6 +20,13 @@ This project is designed to demonstrate search-related features, including:
 - Highlighting matched keywords within the results.  
 
 The search logic is handled entirely on the frontend, processing static data received from an API.  
+
+## Deployment  
+
+This application is deployed using **AWS CloudFront + S3** as a static site. You can access the live version here:  
+
+🔗 **[Live Demo](https://d1iyta6uxh0hou.cloudfront.net/)**  
+
 
 ## Preview  
 
@@ -41,12 +48,6 @@ The search logic is handled entirely on the frontend, processing static data rec
 
 ### ✅ Test Coverage Report  
 ![Test Coverage](./screenshots/test-coverage.png)  
-
-## Deployment  
-
-This application is deployed using **AWS CloudFront + S3** as a static site. You can access the live version here:  
-
-🔗 **[Live Demo](https://d1iyta6uxh0hou.cloudfront.net/)**  
 
 ## Libraries Used  
 
