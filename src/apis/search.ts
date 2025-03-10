@@ -1,5 +1,5 @@
 import axios from "axios";
-import { filterSearchResult, filterSearchSuggestion } from "@/mock/mock-filter";
+import { filterSearchResult, filterSearchSuggestion, getRelatedResults } from "@/mock/mock-filter";
 import { ISearchResultResponse, ISearchSuggestionResponse } from "@/types";
 
 const SEARCH_API_URL =
@@ -34,7 +34,8 @@ export const getSearchSuggestions = async (keyword: string) => {
     );
     return {
       error: null, data: {
-        suggestions: filterSearchSuggestion(data, keyword)
+        suggestions: filterSearchSuggestion(data, keyword),
+        relatedResults: getRelatedResults(data, keyword)
       }
     };
   } catch (error) {

@@ -12,7 +12,8 @@ interface ISearchBoxProps {
 const MAX_INPUT_LENGTH = 100;
 
 function SearchBar({ onSearch }: ISearchBoxProps) {
-  const { suggestions, fetchSuggestions, clearSuggestions } = useSuggestions();
+  const { suggestions, relatedResults, fetchSuggestions, clearSuggestions } =
+    useSuggestions();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [inputValue, setInputValue] = useState("");
@@ -37,7 +38,7 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
 
     const sanitizedInput = sanitizeInput(input);
     setInputValue(sanitizedInput);
-
+    setActiveSuggestionIndex(-1);
     if (sanitizedInput.length > 2) {
       fetchSuggestions(sanitizedInput);
       setIsDropdownOpen(true);
@@ -57,9 +58,15 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const totalItems = suggestions.length + relatedResults.length;
     if (e.key === "Enter") {
       if (activeSuggestionIndex >= 0) {
-        selectSuggestion(suggestions[activeSuggestionIndex]);
+        if (activeSuggestionIndex < suggestions.length) {
+          selectSuggestion(suggestions[activeSuggestionIndex]);
+        } else {
+          const relatedIndex = activeSuggestionIndex - suggestions.length;
+          selectSuggestion(relatedResults[relatedIndex]);
+        }
       } else {
         handleSubmit();
       }
@@ -69,7 +76,7 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       setActiveSuggestionIndex((prev) =>
-        prev + 1 < suggestions.length ? prev + 1 : prev
+        prev + 1 < totalItems ? prev + 1 : prev
       );
     }
 
@@ -116,9 +123,10 @@ function SearchBar({ onSearch }: ISearchBoxProps) {
           </button>
         )}
 
-        {isDropdownOpen && suggestions.length > 0 && (
+        {isDropdownOpen && (suggestions.length > 0 || relatedResults.length > 0) && (
           <SuggestionDropdown
             suggestions={suggestions}
+            relatedResults={relatedResults}
             activeIndex={activeSuggestionIndex}
             inputValue={inputValue}
             onSelect={selectSuggestion}

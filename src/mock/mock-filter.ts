@@ -45,3 +45,25 @@ export const filterSearchSuggestion = (
 
   return filteredSuggestions;
 };
+
+export const getRelatedResults = (
+  result: ISearchSuggestionResponse,
+  keyword: string
+) => {
+  const words = keyword.toLowerCase().trim().split(/\s+/);
+  const relatedResults = new Set<string>();
+
+  words.forEach((word) => {
+    if (result.synonyms[word]) {
+      result.synonyms[word].forEach((synonym) => {
+        Object.keys(result.suggestions).forEach((suggestion) => {
+          if (suggestion.toLowerCase().includes(synonym)) {
+            relatedResults.add(suggestion);
+          }
+        });
+      });
+    }
+  });
+
+  return Array.from(relatedResults);
+};

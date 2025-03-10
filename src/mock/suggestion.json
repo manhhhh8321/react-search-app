@@ -1,11 +1,21 @@
 {
-    "stemmedQueryTerm": "child",
-    "suggestions": [
-        "child care",
-        "child vaccination",
-        "child health",
-        "child education",
-        "child development account",
-        "register childcare"
-    ]
+  "stemmedQueryTerm": "child",
+  "suggestions": [
+    "child care",
+    "child vaccination",
+    "child health",
+    "child education",
+    "child development account",
+    "register childcare"
+  ],
+  "relatedResults": [
+    "infant care",
+    "baby bonus",
+    "baby support grant",
+    "baby bonus account services",
+    "baby bonus application status",
+    "baby bonus cash gift",
+    "baby bonus eligibility",
+    "care for a new baby"
+  ]
 }

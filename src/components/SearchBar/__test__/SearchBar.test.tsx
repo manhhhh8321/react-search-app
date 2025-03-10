@@ -10,6 +10,7 @@ let mockSuggestions: typeof mockData;
 jest.mock("@/hooks/useSuggestion", () => ({
   useSuggestions: () => ({
     suggestions: mockSuggestions.suggestions,
+    relatedResults: mockSuggestions.relatedResults,
     fetchSuggestions: jest.fn(),
     clearSuggestions: jest.fn(),
   }),
@@ -27,18 +28,15 @@ describe("SearchBar Component", () => {
     expect(input).toBeInTheDocument();
   });
 
-  test("displays suggestions when typing more than two characters", async () => {
+  test("displays suggestions and related results when typing more than two characters", async () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByRole("textbox");
 
-    fireEvent.change(input, { target: { value: "chi" } });
+    fireEvent.change(input, { target: { value: "childcare" } });
 
     await waitFor(() => {
-      expect(
-        screen.getByText(
-          (_, element) => element?.textContent?.trim() === "child care"
-        )
-      ).toBeInTheDocument();
+      expect(screen.getByText("childcare")).toBeInTheDocument();
+      expect(screen.getByText("Related Results")).toBeInTheDocument(); // Ensure related results appear
     });
   });
 
@@ -46,40 +44,37 @@ describe("SearchBar Component", () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByLabelText("search-textfield");
 
-    fireEvent.change(input, { target: { value: "child care" } });
+    fireEvent.change(input, { target: { value: "childcare" } });
 
     await waitFor(() => {
-      expect(screen.getAllByText("child")[0]).toBeInTheDocument();
-      expect(screen.getAllByText("care")[0]).toBeInTheDocument();
+      expect(screen.getByText("childcare")).toBeInTheDocument();
     });
 
-    const firstSuggestion = screen.getAllByText(
-      (_, element) => element?.textContent?.trim() === "child care"
-    );
-
-    fireEvent.click(firstSuggestion[0]);
+    const firstSuggestion = screen.getByText("childcare");
+    fireEvent.click(firstSuggestion);
 
     await waitFor(() => {
-      expect(mockOnSearch).toHaveBeenCalledWith("child care");
+      expect(mockOnSearch).toHaveBeenCalledWith("register childcare");
     });
   });
 
-  test("navigates suggestions with keyboard and selects with Enter", async () => {
+  test("navigates with keyboard and selects a related result with Enter", async () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByRole("textbox");
 
-    fireEvent.change(input, { target: { value: "child care" } });
+    fireEvent.change(input, { target: { value: "childcare" } });
 
     await waitFor(() => {
-      expect(screen.getAllByText("child")[0]).toBeInTheDocument();
-      expect(screen.getAllByText("care")[0]).toBeInTheDocument();
+      expect(screen.getByText("childcare")).toBeInTheDocument();
+      expect(screen.getByText("Related Results")).toBeInTheDocument();
     });
 
     fireEvent.keyDown(input, { key: "ArrowDown" });
+    fireEvent.keyDown(input, { key: "ArrowDown" });
     fireEvent.keyDown(input, { key: "Enter" });
 
-    expect(mockOnSearch).toHaveBeenCalledWith("child care");
-    expect(input).toHaveValue("child care");
+    expect(mockOnSearch).toHaveBeenCalledWith("child vaccination");
+    expect(input).toHaveValue("child vaccination");
   });
 
   test("clears input when clicking clear button", async () => {
@@ -106,23 +101,22 @@ describe("SearchBar Component", () => {
     expect(mockOnSearch).not.toHaveBeenCalled();
   });
 
-  test("will sanitize the input value", async () => {
+  test("sanitizes the input value", async () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByRole("textbox");
 
-    fireEvent.change(input, { target: { value: "child care$#@" } });
+    fireEvent.change(input, { target: { value: "childcare$#@" } });
 
     await waitFor(() => {
-      expect(screen.getAllByText("child")[0]).toBeInTheDocument();
-      expect(screen.getAllByText("care")[0]).toBeInTheDocument();
+      expect(screen.getByText("childcare")).toBeInTheDocument();
     });
 
     fireEvent.keyDown(input, { key: "Enter" });
 
-    expect(mockOnSearch).toHaveBeenCalledWith("child care");
+    expect(mockOnSearch).toHaveBeenCalledWith("childcare");
   });
 
-  it("will not trigger search if the input value is more than 100 characters", async () => {
+  test("does not trigger search if input value exceeds 100 characters", async () => {
     render(<SearchBar onSearch={mockOnSearch} />);
     const input = screen.getByRole("textbox");
 
