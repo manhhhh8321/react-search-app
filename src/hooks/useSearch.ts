@@ -11,9 +11,13 @@ export const useSearch = () => {
   const fetchSearchResults = async (query: string) => {
     setLoading(true);
     try {
-      const { data } = await getSearchResults(query);
+      const { data, error } = await getSearchResults(query);
       setResults(data);
       setSearchKeyword(query);
+
+      if (error) {
+        setError(error);
+      }
     } catch (error) {
       setError(error);
       console.error("Error fetching search results", error);
